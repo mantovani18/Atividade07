@@ -18,9 +18,6 @@ public class ListaLigada {
 
     /**
      * Verifica se a lista está vazia.
-     *
-     * @return true se a lista não possui elementos,
-     *         false caso contrário.
      */
     public Boolean estaVazia() {
         return this.inicio == null;
@@ -28,27 +25,22 @@ public class ListaLigada {
 
     /**
      * Exibe todos os elementos da lista com suas posições.
-     * Percorre a lista do início até o final.
      */
     public void exibirlista() {
 
-        // Se a lista estiver vazia, exibe mensagem
         if (this.estaVazia()) {
             System.out.println("Lista vazia");
             return;
         }
 
-        // Ponteiro auxiliar para percorrer a lista
         No atual = inicio;
         int posicao = 0;
 
         System.out.println("Lista atual: ");
 
-        // Percorre todos os nós até chegar ao final (null)
-        while(atual != null) {
-            System.out.println("Posição "+ posicao + ": "+ atual.nome);
-
-            atual = atual.proximo; // Avança para o próximo nó
+        while (atual != null) {
+            System.out.println("Posição " + posicao + ": " + atual.nome);
+            atual = atual.proximo;
             posicao++;
         }
 
@@ -57,65 +49,50 @@ public class ListaLigada {
 
     /**
      * Insere um novo nome no final da lista.
-     *
-     * @param Nome Nome a ser inserido
      */
-    public void inserirNoFinal(String Nome){
+    public void inserirNoFinal(String nome) {
 
-        // Cria um novo nó com o nome informado
         No novo = new No(nome);
 
-        // Se a lista estiver vazia, o novo nó vira o primeiro
         if (inicio == null) {
             inicio = novo;
-        }
-        else {
+        } else {
 
-            // Percorre até o último nó
             No atual = inicio;
-            while(atual.proximo != null){
+            while (atual.proximo != null) {
                 atual = atual.proximo;
             }
 
-            // Liga o último nó ao novo nó
-            atual.proximo = novo
+            atual.proximo = novo;
         }
     }
 
     /**
      * Insere um nome em uma posição específica da lista.
-     *
-     * @param nome Nome a ser inserido
-     * @param posicao Posição desejada (começando em 0)
      */
-    public void inserirNaPosicao(String nome, int posicao){
+    public void inserirNaPosicao(String nome, int posicao) {
 
-        // Cria o novo nó
         No novo = new No(nome);
 
-        // Caso especial: inserir na posição 0 (início)
-        if(posicao == 0){
+        if (posicao == 0) {
             novo.proximo = inicio;
             inicio = novo;
             return;
         }
 
-        // Percorre até o nó anterior à posição desejada
         No atual = inicio;
         int i = 0;
 
-        while(atual != null && i < posicao - 1){
+        while (atual != null && i < posicao - 1) {
             atual = atual.proximo;
-            i++
+            i++;
         }
 
-        // Se chegou ao final antes da posição, é inválida
-        if(atual == null){
+        if (atual == null) {
             System.out.println("Posição inválida");
             return;
         }
 
-        // Ajusta os ponteiros para inserir o novo nó
         novo.proximo = atual.proximo;
         atual.proximo = novo;
     }
@@ -123,89 +100,64 @@ public class ListaLigada {
     /**
      * Busca um nome na lista.
      *
-     * @param nome Nome a ser buscado
-     * @return posição onde o nome foi encontrado
+     * @return posição onde foi encontrado ou -1 se não existir
      */
-    public String buscarNome(String nome){
+    public int buscarNome(String nome) {
 
         No atual = inicio;
         int posicao = 0;
 
-        // Se a lista estiver vazia
-        if(atual == null){
-            System.out.println("Nome não encontrado. ");
-            return;
-        }
+        while (atual != null) {
 
-        // Percorre a lista procurando o nome
-        while (atual != null){
-
-            // Compara ignorando maiúsculas/minúsculas
-            if(atual.nome.equalsIgnoreCase(nome)){
+            if (atual.nome.equalsIgnoreCase(nome)) {
                 return posicao;
             }
 
-            atual = atual.proximo
+            atual = atual.proximo;
             posicao++;
         }
 
+        System.out.println("Nome não encontrado.");
+        return -1;
     }
 
     /**
      * Remove um nome da lista.
-     *
-     * @param nome Nome a ser removido
-     * @return true se removido com sucesso,
-     *         false se não encontrado
      */
-    public boolean removerNome(String nome){
+    public boolean removerNome(String nome) {
 
         No atual = inicio;
         No anterior = null;
 
-        // Lista vazia
-        if(atual == null){
-            System.out.println("Nome não encontrado. ");
-            return false;
-        }
+        while (atual != null) {
 
-        // Percorre a lista
-        while(atual != null){
+            if (atual.nome.equalsIgnoreCase(nome)) {
 
-            // Se encontrou o nome
-            if(atual.nome.equalsIgnoreCase(nome)){
-
-                // Caso seja o primeiro elemento
-                if(anterior == null){
+                if (anterior == null) {
                     inicio = atual.proximo;
-                }
-                else{
-                    // Remove ajustando o ponteiro do anterior
-                    anterior.proximo = atual.proximo
+                } else {
+                    anterior.proximo = atual.proximo;
                 }
 
                 return true;
             }
 
-            // Avança os ponteiros
             anterior = atual;
             atual = atual.proximo;
         }
 
+        System.out.println("Nome não encontrado.");
         return false;
     }
 
     /**
-     * Calcula o tamanho da lista.
-     *
-     * @return quantidade de elementos na lista
+     * Retorna o tamanho da lista.
      */
     public int tamanho() {
 
         int count = 0;
         No atual = inicio;
 
-        // Conta todos os nós até o final
         while (atual != null) {
             count++;
             atual = atual.proximo;
@@ -216,23 +168,15 @@ public class ListaLigada {
 
     /**
      * Move um nome para uma nova posição na lista.
-     *
-     * @param nome Nome a ser movido
-     * @param novaPosicao Nova posição desejada
      */
     public void mover(String nome, int novaPosicao) {
 
-        // Busca a posição atual do nome
-        int pos = buscar(nome);
+        int pos = buscarNome(nome);
 
-        // Se não encontrou, não faz nada
         if (pos == -1) return;
 
-        // Remove o elemento da posição atual
-        remover(nome);
-
-        // Insere novamente na nova posição
-        inserirPosicao(nome, novaPosicao);
+        removerNome(nome);
+        inserirNaPosicao(nome, novaPosicao);
     }
 
 }
