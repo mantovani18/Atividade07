@@ -1,5 +1,3 @@
-package B1.at_07;
-
 /**
  * Classe que representa uma Lista Ligada Simples de nomes.
  * Cada elemento da lista é um nó (No) que contém um nome e
